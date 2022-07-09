@@ -1,20 +1,26 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "version": "0.0.1",
-  "short_name": "React App",
-  "name": "Create React App Sample",
-  "description": "Sample application showing how to create an extension with Create React App",
-  "browser_action": {
-    "default_title": "CRE",
-    "default_popup": "popup.html"
+  "short_name": "MyPasswordManager",
+  "name": "My Password Manager",
+  "description": "My own chrome extension to store my password, autofill my email and password in log-in page",
+  "action": {
+    "default_title": "MyPasswordManager",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "img/icon-16.png",
+      "48": "img/icon-48.png",
+      "128": "img/icon-128.png"
+    }
   },
   "background": {
-    "scripts": ["background.bundle.js"]
+    "service_worker": "background.bundle.js"
   },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["contentScript.bundle.js"]
+      "js": ["contentScript.bundle.js"],
+      "css":[]
     }
   ],
   "icons": {
@@ -23,6 +29,6 @@
     "128": "img/icon-128.png"
   },
   "options_page": "options.html",
-  "permissions": ["activeTab"],
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+  "permissions": ["scripting","activeTab", "identity"],
+  "host_permissions": ["<all_ulrs>"]
 }

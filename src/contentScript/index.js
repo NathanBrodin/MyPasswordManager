@@ -1,19 +1,106 @@
-// If your extension doesn't need a content script, just leave this file empty
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase"
 
-// This is an example of a script that will run on every page. This can alter pages
-// Don't forget to change `matches` in manifest.json if you want to only change specific webpages
-printAllPageLinks();
+class PageInfo {
+  constructor() {
+    // Get the inputs of the website, if none, quit the script
+    let inputs = document.getElementsByTagName('input');
+    if(inputs.length === 0) {
+      return;
+    }
 
-// This needs to be an export due to typescript implementation limitation of needing '--isolatedModules' tsconfig
-export function printAllPageLinks() {
-  const allLinks = Array.from(document.querySelectorAll('a')).map(
-    link => link.href
-  );
+    this.url = this.getDomain();
+    this.userId = "admin";
 
-  console.log('-'.repeat(30));
-  console.log(
-    `These are all ${allLinks.length} links on the current page that have been printed by the Sample Create React Extension`
-  );
-  console.log(allLinks);
-  console.log('-'.repeat(30));
+    // Search the data of the user
+    const user = async() => {
+        const urlRef = doc(db, "/users/" + this.userId + "/data/" + this.url);
+        const urlSnap = await getDoc(urlRef);
+
+        // if url is stored, get values
+        if(urlSnap.exists()) {
+          this.email = urlSnap.data().email;
+          this.username = urlSnap.data().username;
+          this.password = urlSnap.data().password;
+
+          // Get the user preferences
+          const prefRef = doc(db, "/users/" + this.userId + "/profil/preferences");
+          const prefSnap = await getDoc(prefRef);
+          this.autoSubmit = prefSnap.data().autoSubmit;
+
+          this.setUserInputs(inputs);
+
+        // Else wait to get the inputs the user will fill
+        } else {
+          console.log("Url not register");
+
+          for(let i = 0; i < inputs.length; i++) {
+            if(inputs[i].type === "submit") {
+              const submitInput = inputs[i];
+              break;
+            }
+          }
+
+          /*  
+          id=loginbutton, name=login, type=submit
+          */
+        }
+    }
+    user();
+
+  }
+
+  getDomain () {
+    let url = window.location.href;
+    let domain = (new URL(url));
+
+    return domain.hostname.replace('www.', '');
+  }
+
+  setUserInputs(inputs) {
+    // For each inputs, it looks what type it is
+    for(let i = 0; i < inputs.length; i++) {
+      const input = inputs.item(i);
+      
+      this.fillForms(input, input.name);
+      this.fillForms(input, input.type);
+      this.fillForms(input, input.id);   
+    }
+
+    
+    // Send directly the inputs
+    if(this.autoSubmit === true) {
+      document.forms[0].submit();
+    }
+  }
+
+  // Fill the inputs with the givens data
+  fillForms(input, type) {
+    switch(type) {
+      case 'email':
+          input.value = this.email;
+          break;
+
+        case 'username':
+          input.value = this.username;
+          break;
+
+        case 'password':
+        case 'pass':
+          input.value = this.password;
+          break;
+
+        default:
+          break;
+    }
+  }
+}
+
+if(typeof init === 'undefined') {
+  const init = function() {
+    // eslint-disable-next-line no-unused-vars
+    const page = new PageInfo();
+  }
+
+  init();
 }
