@@ -34,12 +34,7 @@ class PageInfo {
         } else {
           console.log("Url not register");
 
-          for(let i = 0; i < inputs.length; i++) {
-            if(inputs[i].type === "submit") {
-              const submitInput = inputs[i];
-              break;
-            }
-          }
+          
 
           /*  
           id=loginbutton, name=login, type=submit
