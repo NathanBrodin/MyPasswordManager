@@ -30,5 +30,5 @@
   },
   "options_page": "options.html",
   "permissions": ["scripting","activeTab", "identity"],
-  "host_permissions": ["<all_ulrs>"]
+  "host_permissions": ["*://*/*"]
 }
