@@ -5,21 +5,23 @@ import Login from "./components/Login"
 import ForgotPassword from "./components/ForgotPassword"
 import UpdateProfile from "./components/UpdateProfile"
 import { AuthProvider } from "./contexts/AuthContext"
-import { BrowserRouter as Router } from "react-router-dom"
-import { Switch, Route } from "react-dom"
+import { createMemoryHistory } from 'history'
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 import PrivateRoute from "./components/PrivateRoute"
 
 function App() {
+  const browserHistory = createMemoryHistory()
+
   return (
-    <Router>
+    <Router history={browserHistory}>
       <AuthProvider>
-        <Switch>
-          <PrivateRoute exact path="/" component={Dashboard}/>
+        <Routes>
+          <Route exact path="/dashboard" element={<PrivateRoute> <Dashboard /> </PrivateRoute> } />
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />
           <Route path="/forgot-password" component={ForgotPassword} />
-          <PrivateRoute path="/update-profile" component={UpdateProfile} />
-        </Switch>
+          <Route exact path="/update-profile" element={<PrivateRoute> <UpdateProfile /> </PrivateRoute> } />
+        </Routes>
       </AuthProvider>
     </Router>
   )
