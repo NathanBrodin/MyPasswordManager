@@ -1,37 +1,53 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { auth } from "../firebase"
-import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth"
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth"
 
-const AuthContext = React.createContext();
+const AuthContext = React.createContext()
 
 export function useAuth() {
-    return useContext(AuthContext);
+    return useContext(AuthContext)
 }
 
 export function AuthProvider({ children }) {
-    const [currentUser, setCurrentUser] = useState();
-    const [loading, setLoading] = useState(true);
+    const [currentUser, setCurrentUser] = useState()
+    const [loading, setLoading] = useState(true)
 
 
     function signup(email, password) {
         createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // Signed in 
-                const user = userCredential.user;
-                return user;
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.log(errorCode + errorMessage);
-                // ..
-            });
+        .then((userCrendtial) => {
+            return userCrendtial.user
+        })
+        .catch((error) => {
+            // TODO : create error for weak password
+            console.error("Unable to create new user : " + error.code + error.message);
+        })
+    }
+
+    function login(email, password) {
+        signInWithEmailAndPassword(auth, email, password)
+        .then((userCrendtial) => {
+            return userCrendtial.user
+        })
+        .catch((error) => {
+            console.error("Unable to sign in : " + error.code + error.message);
+        })
+    }
+
+    function logout() {
+        signOut(auth)
+        .then(() => {
+            return
+        })
+        .catch((error) => {
+            console.error(error);
+        })
     }
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
-            setCurrentUser(user);
-            setLoading(true);
+            setCurrentUser(user)
+            setLoading(false)
         })
 
         return unsubscribe
@@ -39,7 +55,9 @@ export function AuthProvider({ children }) {
 
     const value = {
         currentUser,
-        signup
+        signup,
+        login,
+        logout
     }
 
     return (
