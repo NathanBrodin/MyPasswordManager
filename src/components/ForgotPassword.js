@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom'
 import { useHistory } from "react-dom"
 import { useAuth } from '../contexts/AuthContext'
 
-export default function Login() {
+export default function ForgotPassword() {
     const emailRef = useRef()
-    const passwordRef = useRef()
     
-    const { login } = useAuth()
+    const { resetPassword } = useAuth()
     const [error, setError] = useState("") 
+    const [message, setMessage] = useState("") 
     const [loading, setLoading] = useState(false)
     const history = useHistory()
 
@@ -17,12 +17,14 @@ export default function Login() {
         
         try {
             setError("")    // Reset the error
+            setMessage("")
             setLoading(true)
 
-            await login(emailRef.current.value, passwordRef.current.value)
+            await resetPassword(emailRef.current.value)
+            setMessage("Check your inbox for further instructions")
             history.push("/")
         } catch {
-            setError("Failed to sign In")
+            setError("Failed to reset password")
         }
         setLoading(false)
     }
@@ -30,13 +32,12 @@ export default function Login() {
     return (
         <div className='Signup'>
             <div>
-                <h3>Log In</h3>
+                <h3>Password Reset</h3>
                 <form onSubmit={handleSubmit}>
                     <input type="email" placeholder='Email' ref={emailRef} required/>
-                    <input type="password" placeholder='Password' ref={passwordRef} required/>
-                    <Link to="/forgot-password">Forgot Password ?</Link>
-                    <button disabled={loading} type="submit">Log In</button>
+                    <button disabled={loading} type="submit">Reset Password</button>
                     
+                    <Link to="/login">Log In</Link>
                     <div>
                         Need an account? <Link to="/signup">Sign Up</Link>
                     </div>
