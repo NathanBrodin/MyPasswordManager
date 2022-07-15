@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { useHistory } from "react-dom"
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 
 export default function ForgotPassword() {
@@ -10,7 +9,7 @@ export default function ForgotPassword() {
     const [error, setError] = useState("") 
     const [message, setMessage] = useState("") 
     const [loading, setLoading] = useState(false)
-    const history = useHistory()
+    const history = useNavigate()
 
     async function handleSubmit(e) {
         e.preventDefault()

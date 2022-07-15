@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
-import { Link } from 'react-router-dom'
-import { useHistory } from "react-dom"
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function Dashboard() {
     const [error, setError] = useState("")
     const { currentUser, logout } = useAuth()
-    const history = useHistory()
+    const history = useNavigate()
 
     async function handleLogout() {
         setError("")

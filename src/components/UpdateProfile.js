@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
-import { Link } from 'react-router-dom'
-import { useHistory } from "react-dom"
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function UpdateProfile() {
     const emailRef = useRef()
@@ -11,7 +10,7 @@ export default function UpdateProfile() {
     const { currentUser, updateEmail, updatePassword } = useAuth()
     const [error, setError] = useState("") 
     const [loading, setLoading] = useState(false)
-    const history = useHistory()
+    const history = useNavigate()
 
     function handleSubmit(e) {
         e.preventDefault()
