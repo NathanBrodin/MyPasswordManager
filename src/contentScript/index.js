@@ -1,7 +1,8 @@
 import { doc, getDoc } from "firebase/firestore";
+import React from "react";
 import { db } from "../firebase"
 
-class PageInfo {
+class PageInfo { //extends React.Component {
   constructor() {
     // Get the inputs of the website, if none, quit the script
     let inputs = document.getElementsByTagName('input');

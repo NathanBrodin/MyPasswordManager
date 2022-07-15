@@ -10,7 +10,7 @@ export default function UpdateProfile() {
     const { currentUser, updateEmail, updatePassword } = useAuth()
     const [error, setError] = useState("") 
     const [loading, setLoading] = useState(false)
-    const history = useNavigate()
+    const navigate = useNavigate()
 
     function handleSubmit(e) {
         e.preventDefault()
@@ -31,7 +31,7 @@ export default function UpdateProfile() {
         }
 
         Promise.all(promises).then (() => {
-            history.push("/")
+            navigate("/", { replace: true })
         }).catch(() => {
             setError("Failed to update account")
         }).finally(() => {

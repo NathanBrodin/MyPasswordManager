@@ -9,7 +9,7 @@ export default function ForgotPassword() {
     const [error, setError] = useState("") 
     const [message, setMessage] = useState("") 
     const [loading, setLoading] = useState(false)
-    const history = useNavigate()
+    const navigate = useNavigate()
 
     async function handleSubmit(e) {
         e.preventDefault()
@@ -21,7 +21,7 @@ export default function ForgotPassword() {
 
             await resetPassword(emailRef.current.value)
             setMessage("Check your inbox for further instructions")
-            history.push("/")
+            navigate("/", { replace: true })
         } catch {
             setError("Failed to reset password")
         }
