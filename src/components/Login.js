@@ -9,7 +9,7 @@ export default function Login() {
     const { login } = useAuth()
     const [error, setError] = useState("") 
     const [loading, setLoading] = useState(false)
-    const navigate = useNavigate()
+    let navigate = useNavigate()
 
     async function handleSubmit(e) {
         e.preventDefault()
@@ -19,9 +19,10 @@ export default function Login() {
             setLoading(true)
 
             await login(emailRef.current.value, passwordRef.current.value)    
-            navigate("/", { replace: true })
+            navigate("/")
         } catch {
-            setError("Failed to sign In")
+            setError("Failed to log In")
+            console.error(error);
         }
         setLoading(false)
     }
@@ -35,11 +36,10 @@ export default function Login() {
                     <input type="password" placeholder='Password' ref={passwordRef} required/>
                     <Link to="/forgot-password">Forgot Password ?</Link>
                     <button disabled={loading} type="submit">Log In</button>
-                    
-                    <div>
+                </form>
+                <div>
                         Need an account? <Link to="/signup">Sign Up</Link>
                     </div>
-                </form>
             </div>
         </div>
     )

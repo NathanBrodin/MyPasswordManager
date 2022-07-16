@@ -12,7 +12,7 @@ export default function Dashboard() {
 
         try {
             await logout()
-            navigate("/login", { replace: true })
+            navigate("/login")
         } catch {
             setError("Failed to log out")
         }
