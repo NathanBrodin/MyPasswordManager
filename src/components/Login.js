@@ -28,15 +28,17 @@ export default function Login() {
     }
     
     return (
-        <div className='Signup'>
+        <div className='Login'>
             <div>
                 <h3>Log In</h3>
                 <form onSubmit={handleSubmit}>
-                    <input type="email" placeholder='Email' ref={emailRef} required/>
-                    <input type="password" placeholder='Password' ref={passwordRef} required/>
-                    <Link to="/forgot-password">Forgot Password ?</Link>
+                    <label>Email</label>
+                    <input type="email" ref={emailRef} required/>
+                    <label>Password</label>
+                    <input type="password" ref={passwordRef} required/>
                     <button disabled={loading} type="submit">Log In</button>
                 </form>
+                <Link to="/forgot-password">Forgot Password ?</Link>
                 <div>
                         Need an account? <Link to="/signup">Sign Up</Link>
                     </div>

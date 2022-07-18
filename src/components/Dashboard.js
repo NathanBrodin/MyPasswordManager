@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
 
 export default function Dashboard() {
+        // eslint-disable-next-line
     const [error, setError] = useState("")
     const { currentUser, logout } = useAuth()
     const navigate = useNavigate()

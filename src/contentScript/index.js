@@ -1,5 +1,4 @@
 import { doc, getDoc } from "firebase/firestore";
-import React from "react";
 import { db } from "../firebase"
 
 class PageInfo { //extends React.Component {
@@ -94,7 +93,7 @@ class PageInfo { //extends React.Component {
 
 if(typeof init === 'undefined') {
   const init = function() {
-    // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line
     const page = new PageInfo();
   }
 

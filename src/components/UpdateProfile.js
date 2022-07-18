@@ -8,6 +8,7 @@ export default function UpdateProfile() {
     const passwordConfirmRef = useRef()
     
     const { currentUser, updateEmail, updatePassword } = useAuth()
+    // eslint-disable-next-line
     const [error, setError] = useState("") 
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()

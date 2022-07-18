@@ -1,6 +1,7 @@
 import React, { useContext, createContext, useEffect, useState } from 'react'
-import { auth } from "../firebase"
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, updatePassword } from "firebase/auth"
+import { auth, db } from "../firebase"
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail} from "firebase/auth"
+import { doc, setDoc } from 'firebase/firestore'
 
 const AuthContext = createContext()
 
@@ -16,12 +17,26 @@ export function AuthProvider({ children }) {
     function signup(email, password) {
         createUserWithEmailAndPassword(auth, email, password)
         .then((userCrendtial) => {
+            createNewUserData(userCrendtial.user)
+
             return userCrendtial.user
         })
         .catch((error) => {
             // TODO : create error for weak password
             console.error("Unable to create new user : " + error.code + error.message);
         })
+    }
+
+    async function createNewUserData(user) {
+        try {
+            // eslint-disable-next-line
+            const userRef = await setDoc(doc(db, "users", user.uid), {
+                email: user.email
+            })
+
+        } catch (e) {
+            console.error("Error adding new user in database: ", e)
+        }
     }
 
     function login(email, password) {
@@ -37,6 +52,7 @@ export function AuthProvider({ children }) {
     function logout() {
         signOut(auth)
         .then(() => {
+            // Log out succesfull
             return
         })
         .catch((error) => {
@@ -48,6 +64,7 @@ export function AuthProvider({ children }) {
         sendPasswordResetEmail(auth, email)
         .then(() => {
             // Password reset email sent!
+            return
         })
         .catch((error) => {
             console.error("Unable to send reset email: " + error.code + error.message);
@@ -64,14 +81,7 @@ export function AuthProvider({ children }) {
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if(user) {
-                // User is signed in
-                setCurrentUser(user)
-            } else {
-                // User is signed out
-                setCurrentUser(null)
-                
-            }
+            setCurrentUser(user)
             setLoading(false)
         })
 

@@ -6,7 +6,9 @@ export default function ForgotPassword() {
     const emailRef = useRef()
     
     const { resetPassword } = useAuth()
+        // eslint-disable-next-line
     const [error, setError] = useState("") 
+        // eslint-disable-next-line
     const [message, setMessage] = useState("") 
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
