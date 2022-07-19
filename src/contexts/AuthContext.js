@@ -1,7 +1,7 @@
 import React, { useContext, createContext, useEffect, useState } from 'react'
 import { auth, db } from "../firebase"
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail} from "firebase/auth"
-import { doc, setDoc } from 'firebase/firestore'
+import { addDoc, doc, setDoc, collection } from 'firebase/firestore'
 
 const AuthContext = createContext()
 
@@ -12,7 +12,6 @@ export function useAuth() {
 export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState()
     const [loading, setLoading] = useState(true)
-
 
     function signup(email, password) {
         createUserWithEmailAndPassword(auth, email, password)
@@ -33,7 +32,14 @@ export function AuthProvider({ children }) {
             const userRef = await setDoc(doc(db, "users", user.uid), {
                 email: user.email
             })
+            // eslint-disable-next-line
+            const userData = await addDoc(collection(db, "users", user.uid, "data"), {
 
+            })
+            // eslint-disable-next-line
+            const userPreferences = await addDoc(collection(db, "users", user.uid, "preferences"), {
+                autoSubmit: false
+            })
         } catch (e) {
             console.error("Error adding new user in database: ", e)
         }

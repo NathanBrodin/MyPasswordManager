@@ -1,17 +1,55 @@
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebase"
+import { async } from '@firebase/util'
+import { doc, getDoc } from 'firebase/firestore'
+import React from 'react'
+import { useAuth } from '../contexts/AuthContext'
+import { db } from '../firebase'
 
-class PageInfo { //extends React.Component {
-  constructor() {
-    // Get the inputs of the website, if none, quit the script
-    let inputs = document.getElementsByTagName('input');
-    if(inputs.length === 0) {
-      return;
+export default function Page() {
+  const inputs = getInputs()  // TODO: Return if there is no inputs
+  const url = getUrl()
+  const { currentUser } = useAuth()
+
+  // Search the data of the user
+  const userData = async() => {
+    const urlRef = doc(db, "users/" + currentUser.uid + "/data/" + url)
+    const urlSnap = await getDoc(urlRef)
+    
+    // if url is stored, get values
+    if(urlSnap.exists()) {
+
+    } else {
+      // Prepare to store the data
+      console.log("Data of this website is not yet stored")
     }
+  }
 
-    this.url = this.getDomain();
-    this.userId = "admin";
+  function getInputs() {
+    const inputs = document.getElementsByTagName('input');
 
+    return inputs
+  }
+
+  function getUrl() {
+    let url = window.location.href;
+    let domain = (new URL(url));
+
+    return domain.hostname.replace('www.', '');
+  }
+  
+  return (
+    <div></div>
+  )
+}
+
+if(typeof init === 'undefined') {
+  const init = function() {
+    Page()
+  }
+
+  init();
+}
+
+/*
     // Search the data of the user
     const user = async() => {
         const urlRef = doc(db, "/users/" + this.userId + "/data/" + this.url);
@@ -38,7 +76,7 @@ class PageInfo { //extends React.Component {
 
           /*  
           id=loginbutton, name=login, type=submit
-          */
+          
         }
     }
     user();
@@ -99,3 +137,4 @@ if(typeof init === 'undefined') {
 
   init();
 }
+*/
