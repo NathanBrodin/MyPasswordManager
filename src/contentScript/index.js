@@ -1,10 +1,30 @@
-import { async } from '@firebase/util'
-import { doc, getDoc } from 'firebase/firestore'
 import React from 'react'
+import { createRoot } from 'react-dom/client';
+import { doc, getDoc } from 'firebase/firestore'
 import { useAuth } from '../contexts/AuthContext'
 import { db } from '../firebase'
 
+if(typeof init === 'undefined') {
+  const init = function() {
+    // Adding the extension to the document
+    const extensionRoot = document.createElement('div')
+    extensionRoot.id = 'extension'
+    document.body.appendChild(extensionRoot)
+
+    // Render the extension to get the script working
+    const container = document.getElementById('extension')
+    const root = createRoot(container)
+    root.render(<Page />)
+  }
+  
+  init();
+}
+
 export default function Page() {
+
+  document.body.style.backgroundColor = "#32a852"
+
+  /*
   const inputs = getInputs()  // TODO: Return if there is no inputs
   const url = getUrl()
   const { currentUser } = useAuth()
@@ -29,24 +49,21 @@ export default function Page() {
     return inputs
   }
 
+  function fillInputs() {
+    var inputType = inputs[0].type
+    console.error("Type of the first input is: ", inputType)
+  }
+
   function getUrl() {
     let url = window.location.href;
     let domain = (new URL(url));
 
     return domain.hostname.replace('www.', '');
   }
-  
+  */
   return (
     <div></div>
   )
-}
-
-if(typeof init === 'undefined') {
-  const init = function() {
-    Page()
-  }
-
-  init();
 }
 
 /*
