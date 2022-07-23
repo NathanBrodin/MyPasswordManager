@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 import { AuthProvider } from '../contexts/AuthContext'
@@ -28,13 +28,18 @@ export default function Page() {
   const inputs = getInputs()
   const form = document.forms[0]
   const url = getUrl()
+  const [isStored, setStored] = useState()
   const currentUser = {uid: "admin", email: "admin@gmail.com"}
 
   useEffect(() => {
-    form.addEventListener("submit", storeInputs)
+    console.log("useEffect")
+    if(isStored === false) {
+      form.addEventListener("submit", storeInputs)
+    }
 
     return () => form.removeEventListener("submit", storeInputs)
-})
+    // eslint-disable-next-line
+}, [isStored])
 
   if(inputs.length === 0 || !currentUser) {
     console.log("No inputs nor user")
@@ -51,10 +56,11 @@ export default function Page() {
     // if url is stored, get values
     if(urlSnap.exists()) {
       console.log("This website is stored")
-      fillInputs()
+      fillInputs(urlSnap.data())
     } else {
       // Prepare to store the data
-      console.log("Data of this website is not stored yet, listening to submitEvent")
+      console.log("Data of this website is not stored yet, starting the useEffect")
+      setStored(false)
     }
   }
   userData()
@@ -65,18 +71,24 @@ export default function Page() {
     return Object.values(inputs).filter(input => input.type !== "hidden")
   }
 
-  function fillInputs() {
-    console.log("Filling the inputs")
+  function fillInputs(data) {
+    for(let input of inputs) {
+      try {
+        input.value = data[input.id]
+      } catch(e) {
+        console.error("Data of input [" + input.id + "] was not found, " + e)
+      }
+    }
   }
 
   async function storeInputs() {
-    console.log("Submit has been pressed")
+    console.log("StoreInputs")
 
-    await setDoc(doc(db, "users", currentUser.uid, "data", url), {
-    })
+    const urlDoc = doc(db, "users", currentUser.uid, "data", url)
+    await setDoc(urlDoc, {})
 
     for(let input of inputs) {    
-      await updateDoc(doc(db, "users", currentUser.uid, "data", url), {
+      await updateDoc(urlDoc, {
         [input.id]: input.value
       })
     }
