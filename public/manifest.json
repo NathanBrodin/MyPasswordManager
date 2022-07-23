@@ -29,6 +29,6 @@
     "128": "img/icon-128.png"
   },
   "options_page": "options.html",
-  "permissions": ["scripting","activeTab", "identity"],
+  "permissions": ["scripting","activeTab", "identity", "tabs"],
   "host_permissions": ["*://*/*"]
 }

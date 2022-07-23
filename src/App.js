@@ -14,9 +14,9 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route exact path="/" element={<PrivateRoute> <Dashboard /> </PrivateRoute> } />
-          <Route path="/signup" element={<Signup/>} />
-          <Route path="/login" element={<Login/>} />
-          <Route path="/forgot-password" element={<ForgotPassword/>} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route exact path="/update-profile" element={<PrivateRoute> <UpdateProfile /> </PrivateRoute> } />
         </Routes>
       </AuthProvider>
