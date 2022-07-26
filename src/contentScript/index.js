@@ -5,6 +5,7 @@ import { AuthProvider } from '../contexts/AuthContext'
 import { db } from '../firebase'
 
 if(typeof init === 'undefined') {
+  console.clear()
   const init = function() {
     // Adding the extension to the document
     const extensionRoot = document.createElement('div')
@@ -26,14 +27,21 @@ if(typeof init === 'undefined') {
 
 export default function Page() {
   const inputs = getInputs()
-  const form = document.forms[0]
+  const form = getForm()
   const url = getUrl()
   const [isStored, setStored] = useState()
   const currentUser = {uid: "admin", email: "admin@gmail.com"}
 
+  console.log("Page: " + url + ", currentUser: " + currentUser.uid + ", " + currentUser.email)
+  console.log("Inputs: " + inputs.length)
+  for(let input of inputs) {
+    console.log(input)
+  }
+
   useEffect(() => {
-    console.log("useEffect")
+    console.log("useEffect as started")
     if(isStored === false) {
+      console.log("Waiting to submit the form")
       form.addEventListener("submit", storeInputs)
     }
 
@@ -42,11 +50,9 @@ export default function Page() {
 }, [isStored])
 
   if(inputs.length === 0 || !currentUser) {
-    console.log("No inputs nor user")
+    console.log("There is no inputs and or user on this page")
     return
   }
-
-  console.log("Current user: ", currentUser.uid)
 
   // Search the data of the user
   const userData = async() => {
@@ -55,11 +61,11 @@ export default function Page() {
     
     // if url is stored, get values
     if(urlSnap.exists()) {
-      console.log("This website is stored")
+
+      console.log("Data of this website are stored, filling the inputs")
       fillInputs(urlSnap.data())
     } else {
-      // Prepare to store the data
-      console.log("Data of this website is not stored yet, starting the useEffect")
+      console.log("Data of this website aren't stored, preparing to store them")
       setStored(false)
     }
   }
@@ -68,7 +74,25 @@ export default function Page() {
   function getInputs() {
     const inputs = document.getElementsByTagName('input');
 
-    return Object.values(inputs).filter(input => input.type !== "hidden")
+    return Object.values(inputs).filter(filterInputs)
+  }
+
+  function filterInputs(input) {
+    switch (input.type) {
+      case "email":
+      case "password":
+      case "tel":
+      case "text":       
+        return true
+    
+      default:
+        return false
+    }
+
+  }
+
+  function getForm() {
+    return inputs[0].form
   }
 
   function fillInputs(data) {
@@ -82,8 +106,7 @@ export default function Page() {
   }
 
   async function storeInputs() {
-    console.log("StoreInputs")
-
+    console.log("Storing the inputs")
     const urlDoc = doc(db, "users", currentUser.uid, "data", url)
     await setDoc(urlDoc, {})
 
