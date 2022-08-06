@@ -1,7 +1,7 @@
 import logo from '../logo.svg';
 import './Options.css';
 
-function Options() {
+export default function Options() {
   return (
     <div className="App">
       <header className="App-header">
@@ -21,5 +21,3 @@ function Options() {
     </div>
   );
 }
-
-export default Options;

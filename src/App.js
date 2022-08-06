@@ -8,6 +8,7 @@ import { AuthProvider } from "./contexts/AuthContext"
 import { HashRouter as Router, Route, Routes } from "react-router-dom"
 import PrivateRoute from "./components/PrivateRoute"
 
+
 function App() {
   return (
     <Router>

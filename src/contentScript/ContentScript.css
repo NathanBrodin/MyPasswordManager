@@ -1,0 +1,17 @@
+@import url(https://fonts.googleapis.com/css?family=Ubuntu);
+
+/* class qui s'applique a toute la page */
+
+* {
+    font-family: 'Ubuntu';
+}
+
+.extension-container {
+    padding: 10%;
+    background-color: lightslategray;
+}
+
+.extension-container p {
+    color: white;
+    font-size: large;
+}
