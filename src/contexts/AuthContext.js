@@ -1,3 +1,4 @@
+/* global chrome */
 import React, { useContext, createContext, useEffect, useState } from 'react'
 import { auth, db } from "../firebase"
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail} from "firebase/auth"
@@ -85,9 +86,14 @@ export function AuthProvider({ children }) {
         return currentUser.updatePassword(password)
     }
 
+    function saveCurrentUser(user) {
+        chrome.storage.local.set({key: user})
+    }
+
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setCurrentUser(user)
+            saveCurrentUser(user)
             setLoading(false)
         })
 

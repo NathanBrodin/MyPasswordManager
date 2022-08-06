@@ -5,13 +5,8 @@
 * {
     font-family: 'Ubuntu';
 }
-
+/* TODO: URGENT-ADD FRAME TO PREVENT CHANGING DOC STYLE */
 .extension-container {
     padding: 10%;
     background-color: lightslategray;
-}
-
-.extension-container p {
-    color: white;
-    font-size: large;
 }
