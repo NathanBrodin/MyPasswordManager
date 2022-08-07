@@ -7,15 +7,15 @@ export default function Options() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/options/Options.js</code> and save to reload.
+          Otpions not developed yet
         </p>
         <a
           className="App-link"
-          href="https://reactjs.org"
+          href="https://github.com/NathanBrodin/MyPasswordManager"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          Go to Github
         </a>
       </header>
     </div>

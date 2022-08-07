@@ -86,8 +86,11 @@ export function AuthProvider({ children }) {
         return currentUser.updatePassword(password)
     }
 
-    function saveCurrentUser(user) {
-        chrome.storage.local.set({key: user})
+    function saveCurrentUser(currentUser) {
+        if(!currentUser) {
+            return chrome.storage.local.set({user: null})
+        }
+        return chrome.storage.local.set({user: currentUser.uid})
     }
 
     useEffect(() => {

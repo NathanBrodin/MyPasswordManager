@@ -1,12 +1,8 @@
 @import url(https://fonts.googleapis.com/css?family=Ubuntu);
 
-/* class qui s'applique a toute la page */
-
-* {
-    font-family: 'Ubuntu';
-}
 /* TODO: URGENT-ADD FRAME TO PREVENT CHANGING DOC STYLE */
 .extension-container {
+    font-family: 'Ubuntu';
     padding: 10%;
     background-color: lightslategray;
 }

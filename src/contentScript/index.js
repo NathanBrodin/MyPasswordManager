@@ -1,6 +1,5 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client';
-import { AuthProvider } from '../contexts/AuthContext'
 import ContentScript from './ContentScript';
 import './index.css'
 
@@ -15,11 +14,8 @@ if(typeof init === 'undefined') {
     const container = document.getElementById('extension-root')
     const root = createRoot(container)
     root.render(
-      <AuthProvider>
-        <ContentScript />
-      </AuthProvider>
+      <ContentScript />
     )
-  }
-  
+  }  
   init();
 }
