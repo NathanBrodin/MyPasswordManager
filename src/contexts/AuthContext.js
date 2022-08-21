@@ -88,15 +88,17 @@ export function AuthProvider({ children }) {
 
     function saveCurrentUser(currentUser) {
         if(!currentUser) {
+            console.log("No current user")
             return chrome.storage.local.set({user: null})
         }
-        return chrome.storage.local.set({user: currentUser.uid})
+        console.log("Saving current user: ", currentUser.uid)
+        return chrome.storage.local.set({user: "admin"})
     }
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
-            setCurrentUser(user)
             saveCurrentUser(user)
+            setCurrentUser(user)
             setLoading(false)
         })
 
