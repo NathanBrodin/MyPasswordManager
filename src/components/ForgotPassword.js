@@ -31,18 +31,16 @@ export default function ForgotPassword() {
     }
     
     return (
-        <div className='Signup'>
-            <div>
-                <h3>Password Reset</h3>
-                <form onSubmit={handleSubmit}>
-                    <input type="email" placeholder='Email' ref={emailRef} required/>
-                    <button disabled={loading} type="submit">Reset Password</button>
-                    
-                    <Link to="/login">Log In</Link>
-                    <div>
-                        Need an account? <Link to="/signup">Sign Up</Link>
-                    </div>
-                </form>
+        <div className='component-container'>
+            <h1 className='title'>Reset Password</h1>
+            <form className='form' onSubmit={handleSubmit}>
+                <div className='input-container'>
+                    <input className='input' id='email' type='email' ref={emailRef} placeholder='Email' required/>
+                </div>
+                <button className='submit-button' disabled={loading} type="submit">Reset Password</button>
+            </form>
+            <div className='text'>
+                Need an account ? <Link to="/signup">Sign Up</Link>
             </div>
         </div>
     )

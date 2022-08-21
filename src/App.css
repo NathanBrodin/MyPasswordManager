@@ -15,8 +15,75 @@
     --title-color: #333;
     --link-color: blue;
     --bg-color: white;
-    --btn-confirm-color: green;
 
-    --border-radius: 1rem;
+}
 
+.component-container {
+    min-width: 200px;
+
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.title {
+    color: var(--title-color);
+}
+
+.form input{
+    margin-top: 10px;
+    background: var(--bg-color);
+    padding: 0.6em;
+    border-radius: 1rem;
+    border: 1px solid var(--title-color);
+    color: var(--text-color);
+}
+
+.input{
+    position: relative;
+}
+
+.label {
+    color: var(--text-color);
+    pointer-events: none;
+}
+
+.input:focus, .input:valid {
+    outline: none;
+    border: 1px solid var(--link-color);
+}
+
+.input:focus ~ label, .input:valid ~ label {
+    color: var(--link-color);
+}
+
+.submit-button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 70%;
+    border: 0;
+    background: var(--text-color);
+    color: var(--bg-color);
+    padding: 0.68em;
+    border-radius: 1rem;
+    font-weight: bold;
+
+    transition: all 250ms;
+}
+
+.submit-button:hover {
+    background: var(--secondary);
+}
+
+.text {
+    margin-top: 10px;
+}
+
+:link {
+    text-decoration: none;
+    font-style: italic;
+    font-weight: bold;
 }

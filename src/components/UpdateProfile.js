@@ -42,20 +42,26 @@ export default function UpdateProfile() {
     }
     
     return (
-        <div className='Signup'>
-            <div>
-                <h3>Update Profile</h3>
-                <form onSubmit={handleSubmit}>
-                    <input type="email" placeholder='Email' ref={emailRef} required defaultValue={currentUser.email}/>
-                    <input type="password" placeholder='Leave blank to keep the same' ref={passwordRef} required/>
-                    <input type="password" placeholder='Leave blank to keep the same' ref={passwordConfirmRef} required/>
-    
-                    <button disabled={loading} type="submit"> Update</button>
-                    
-                    <div>
-                        <Link to="/">Cancel</Link>
-                    </div>
-                </form>
+        <div className='component-container'>
+            <h1 className='title'>Update Profile</h1>
+            <form className='form' onSubmit={handleSubmit}>
+                <div className='input-container'>
+                    <input className='input' id='email' type='email' ref={emailRef} placeholder='Email' required defaultValue={currentUser.email}/>
+                </div>
+                <div className='input-container'>
+                    <input className='input' id='password' type='password' ref={passwordRef} placeholder='Password' required
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
+                    title="Must contain at least one  number and one uppercase and lowercase letter, and at least 6 or more characters"/>
+                </div>
+                <div className='input-container'>
+                    <input className='input' id='password' type='password' ref={passwordConfirmRef} placeholder='Confirm Password' required
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
+                    title="Must contain at least one  number and one uppercase and lowercase letter, and at least 6 or more characters"/>
+                </div>
+                <button className='submit-button' disabled={loading} type="submit">Update</button>
+            </form>
+            <div className='text'>
+                <Link to="/signup">Cancel</Link>
             </div>
         </div>
     )

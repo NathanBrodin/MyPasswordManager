@@ -33,20 +33,26 @@ export default function Signup() {
     }
     
     return (
-        <div className='Signup'>
-            <div>
-                <h3>Sign Up</h3>
-                <form onSubmit={handleSubmit}>
-                    <input type="email" placeholder='Email' ref={emailRef} required/>
-                    <input type="password" placeholder='Password' ref={passwordRef} required/>
-                    <input type="password" placeholder='Confirm password' ref={passwordConfirmRef} required/>
-    
-                    <button disabled={loading} type="submit"> Sign up</button>
-                    
-                    <div>
-                        Already have an account? <Link to="/login">Log In</Link>
-                    </div>
-                </form>
+        <div className='component-container'>
+            <h1 className='title'>Sign Up</h1>
+            <form className='form' onSubmit={handleSubmit}>
+                <div className='input-container'>
+                    <input className='input' id='email' type='email' ref={emailRef} placeholder='Email' required/>
+                </div>
+                <div className='input-container'>
+                    <input className='input' id='password' type='password' ref={passwordRef} placeholder='Password' required
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
+                    title="Must contain at least one  number and one uppercase and lowercase letter, and at least 6 or more characters"/>
+                </div>
+                <div className='input-container'>
+                    <input className='input' id='password' type='password' ref={passwordConfirmRef} placeholder='Confirm password' required
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
+                    title="Must contain at least one  number and one uppercase and lowercase letter, and at least 6 or more characters"/>
+                </div>
+                <button className='submit-button' disabled={loading} type="submit">Sign Up</button>
+            </form>
+            <div className='text'>
+                Already have an account? <Link to="/login">Log In</Link>
             </div>
         </div>
     )
