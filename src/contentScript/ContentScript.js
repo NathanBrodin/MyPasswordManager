@@ -15,7 +15,7 @@ export default function ContentScript() {
 
   // Wait for user to send his data
   useEffect(() => {
-    if(isStored === false) {
+    if(isStored === false && form) {
       console.log("Waiting for user to send data")
       form.addEventListener("submit", storeInputs)
     }
@@ -34,6 +34,7 @@ export default function ContentScript() {
     if(!url) return
 
     currentUser = getCurrentUser()
+    console.log('currentUser Id: ', currentUser)
     if(!currentUser) return
 
     userData()
@@ -42,7 +43,8 @@ export default function ContentScript() {
   // Search the data of the user
   async function userData() {
     console.log("All the conditions are met, searching for user data")
-    
+
+    console.log("User is: ", currentUser)
     const urlRef = doc(db, "users/" + currentUser + "/data/" + url)
     const urlSnap = await getDoc(urlRef)
     
@@ -73,6 +75,7 @@ export default function ContentScript() {
     switch (input.type) {
       case "email":
       case "password":
+      case "text":
       case "tel":    
         return true
     
@@ -83,12 +86,14 @@ export default function ContentScript() {
   }
   
   function getForm() {
+    var form
     try {
-      return inputs[0].form
+      form = document.getElementsByTagName('form')[0]
     } catch {
       console.log("No form found")
-      return null
+      form =  null
     }
+    return form
   }
   
   function getUrl() {
@@ -99,14 +104,19 @@ export default function ContentScript() {
   }
 
   async function getCurrentUser() {
-    var p = new Promise((resolve, reject) => {
-      chrome.storage.sync.get(['user'], function(result) {
-        resolve(result.user)
+      var promise = new Promise(function(resolve, reject) {
+        chrome.storage.sync.get(['user'], function(result) {
+          resolve(result.user)
+        })
       })
-    })
 
-    const user = await p
-    return user
+      await promise.then(function(result) {
+        return result
+      }).catch(function(error) {
+        console.log(error)
+        return null
+      })
+
   }
 
   function fillInputs(data) {
