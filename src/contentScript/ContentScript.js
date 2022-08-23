@@ -5,8 +5,9 @@ import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 import './ContentScript.css'
 
 export default function ContentScript() {
-  var inputs, form, url, currentUser
+  var inputs, form, url
   const [isStored, setStored] = useState()
+  const [currentUser, setCurrentUser] = useState()
 
   useEffect(() => {
     constructor()
@@ -33,11 +34,7 @@ export default function ContentScript() {
     url = getUrl()
     if(!url) return
 
-    currentUser = getCurrentUser()
-    console.log('currentUser Id: ', currentUser)
-    if(!currentUser) return
-
-    userData()
+    getCurrentUser()  // This an async function, so we need to wait for it to search user in database
   }
 
   // Search the data of the user
@@ -106,17 +103,22 @@ export default function ContentScript() {
   async function getCurrentUser() {
       var promise = new Promise(function(resolve, reject) {
         chrome.storage.sync.get(['user'], function(result) {
-          resolve(result.user)
+
+          if(result.user) {
+            resolve(result.user)
+          } else {
+            reject("No user found")
+          }
         })
       })
+      promise.then(function(result) {
+        console.log("User found: ", result)
+        setCurrentUser(result)
 
-      await promise.then(function(result) {
-        return result
-      }).catch(function(error) {
-        console.log(error)
-        return null
-      })
-
+        userData()  // Start searching for user data
+      }, function(err) {
+        console.log(err); // Error: "It broke"
+      });
   }
 
   function fillInputs(data) {
