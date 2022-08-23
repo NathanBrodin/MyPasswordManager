@@ -31,17 +31,18 @@ export default function ContentScript() {
     if(!form) return 
 
     url = getUrl()
+    if(!url) return
 
     currentUser = getCurrentUser()
-    console.log("Current user : ", currentUser)
-
     if(!currentUser) return
+
     userData()
   }
 
   // Search the data of the user
   async function userData() {
-    console.log("Starting the script")
+    console.log("All the conditions are met, searching for user data")
+    
     const urlRef = doc(db, "users/" + currentUser + "/data/" + url)
     const urlSnap = await getDoc(urlRef)
     
@@ -97,16 +98,15 @@ export default function ContentScript() {
     return domain.hostname.replace('www.', '')
   }
 
-  function getCurrentUser() {
-    try {
+  async function getCurrentUser() {
+    var p = new Promise((resolve, reject) => {
       chrome.storage.sync.get(['user'], function(result) {
-        console.log('User currently is ' + result.user);
-        return result.user
-      });
-    } catch {
-      console.log("No user found")
-      return null
-    }
+        resolve(result.user)
+      })
+    })
+
+    const user = await p
+    return user
   }
 
   function fillInputs(data) {
