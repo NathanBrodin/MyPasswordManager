@@ -29,16 +29,13 @@ export function AuthProvider({ children }) {
 
     async function createNewUserData(user) {
         try {
-            // eslint-disable-next-line
-            const userRef = await setDoc(doc(db, "users", user.uid), {
+            await setDoc(doc(db, "users", user.uid), {
                 email: user.email
             })
-            // eslint-disable-next-line
-            const userData = await addDoc(collection(db, "users", user.uid, "data"), {
+            await addDoc(collection(db, "users", user.uid, "data"), {
 
             })
-            // eslint-disable-next-line
-            const userPreferences = await addDoc(collection(db, "users", user.uid, "preferences"), {
+            await addDoc(collection(db, "users", user.uid, "preferences"), {
                 autoSubmit: false
             })
         } catch (e) {
@@ -85,14 +82,17 @@ export function AuthProvider({ children }) {
     function updatePassword (password) {
         return currentUser.updatePassword(password)
     }
-
+    
     function saveCurrentUser(currentUser) {
         if(!currentUser) {
-            console.log("No current user")
-            return chrome.storage.local.set({user: null})
+            return chrome.storage.sync.set({user: null}, function() {
+                console.log('User set to null')
+              })
         }
-        console.log("Saving current user: ", currentUser.uid)
-        return chrome.storage.local.set({user: "admin"})
+
+        return chrome.storage.sync.set({user: currentUser.uid}, function() {
+            console.log('User set to ' + currentUser.uid)
+          })
     }
 
     useEffect(() => {

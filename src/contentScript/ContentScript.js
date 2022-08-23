@@ -1,7 +1,6 @@
 /* global chrome */
 import React, { useEffect, useState } from 'react'
-import { auth ,db } from '../firebase'
-import { onAuthStateChanged } from "firebase/auth"
+import { db } from '../firebase'
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 import './ContentScript.css'
 
@@ -25,19 +24,6 @@ export default function ContentScript() {
   }, [isStored])
 
   const constructor = function() {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in.
-        var email = user.email
-        var uid = user.uid
-
-        console.log("User is signed in : " + email + " - " + uid)
-      } else {
-        // No user is signed in.
-        console.log("No user is signed in")
-      }
-    })
-
     inputs = getInputs()
     if(!inputs) return 
 
@@ -45,9 +31,11 @@ export default function ContentScript() {
     if(!form) return 
 
     url = getUrl()
+
     currentUser = getCurrentUser()
-    console.log("Current user: " + currentUser)
-    if(!currentUser) return 
+    console.log("Current user : ", currentUser)
+
+    if(!currentUser) return
     userData()
   }
 
@@ -110,10 +98,15 @@ export default function ContentScript() {
   }
 
   function getCurrentUser() {
-    chrome.storage.local.get(['user'], function(result) {
-      console.log("result: ", result)
-      return result.user
-    })
+    try {
+      chrome.storage.sync.get(['user'], function(result) {
+        console.log('User currently is ' + result.user);
+        return result.user
+      });
+    } catch {
+      console.log("No user found")
+      return null
+    }
   }
 
   function fillInputs(data) {
