@@ -5,9 +5,8 @@ import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 import './ContentScript.css'
 
 export default function ContentScript() {
-  var inputs, form, url
+  var inputs, form, url, currentUser
   const [isStored, setStored] = useState()
-  const [currentUser, setCurrentUser] = useState()
 
   useEffect(() => {
     constructor()
@@ -34,7 +33,7 @@ export default function ContentScript() {
     url = getUrl()
     if(!url) return
 
-    getCurrentUser()  // This an async function, so we need to wait for it to search user in database
+    getCurrentUser()  // This an async function, so we need to wait for it to search user in local storage
   }
 
   // Search the data of the user
@@ -113,7 +112,7 @@ export default function ContentScript() {
       })
       promise.then(function(result) {
         console.log("User found: ", result)
-        setCurrentUser(result)
+        currentUser = result
 
         userData()  // Start searching for user data
       }, function(err) {
