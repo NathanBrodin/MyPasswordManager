@@ -15,11 +15,16 @@ export default function ContentScript() {
 
   // Wait for user to send his data
   useEffect(() => {
-    if(isStored === false && form) {
+    if(isStored === false) {
       console.log("Waiting for user to send data")
-      form.addEventListener("submit", storeInputs)
+      
+      form.addEventListener("submit", function(e) {
+        storeInputs()
+        e.preventDefault();
+      })
+
+      return () => form.removeEventListener("submit", storeInputs)
     }
-    return () => form.removeEventListener("submit", storeInputs)
     // eslint-disable-next-line
   }, [isStored])
 
@@ -82,14 +87,8 @@ export default function ContentScript() {
   }
   
   function getForm() {
-    var form
-    try {
-      form = document.getElementsByTagName('form')[0]
-    } catch {
-      console.log("No form found")
-      form =  null
-    }
-    return form
+    console.log("form is: ", inputs[0].form)
+    return inputs[0].form
   }
   
   function getUrl() {
