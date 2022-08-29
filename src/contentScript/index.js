@@ -5,6 +5,11 @@ import './index.css'
 
 if(typeof init === 'undefined') {
   const init = function() {
+
+    if(!document.getElementsByTagName('form')[0]) {
+      return
+    }
+
     // Adding the extension to the document
     const extensionRoot = document.createElement('div')
     extensionRoot.id = 'extension-root'

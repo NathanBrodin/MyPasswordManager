@@ -11,26 +11,32 @@ export default function ContentScript() {
   const [form, setForm] = useState()
   const [url, setUrl] = useState()
   const [currentUser, setCurrentUser] = useState()
+  const [data, setData] = useState()
 
   useEffect(() => {
+    console.log("ContentScript is running")
     constructor()
     // eslint-disable-next-line
   }, [])
 
   useEffect(() => {
+    if(isStored) {
+      fillInputs()
+    }
 
-    if(isStored === false) {
+    if(!isStored && form) {
       console.log("Waiting for user to send data")
-
-      // document.getElementsByTagName('form')[0].addEventListener
 
       form.addEventListener('submit', function(e) {
         console.log("Form submitted")
         storeInputs()
-        e.preventDefault()
+        setStored(true)
       })
-    }
 
+      return () => {
+        form.removeEventListener('submit', function(e) {})
+      }
+    }
     // eslint-disable-next-line
   }, [isStored])
 
@@ -40,8 +46,6 @@ export default function ContentScript() {
     setForm(getForm())
     setUrl(getUrl())
 
-    console.log("Inputs: ", inputs, "Form: ", form, "Url: ", url)
-
     getCurrentUser()
   }
 
@@ -49,22 +53,16 @@ export default function ContentScript() {
   async function userData() {
     console.log("All the conditions are met, searching for user data")
 
-    console.log("User is: ", currentUser)
     const urlRef = doc(db, "users/" + currentUser + "/data/" + url)
     const urlSnap = await getDoc(urlRef)
     
     // if url is stored, get values
     if(urlSnap.exists()) {
       console.log("Data stored")
-      fillInputs(urlSnap.data())
 
-      return (
-        <div className='extension-container'>
-          <header>
-          <h1>Data as been successfully stored</h1>
-          </header>
-        </div>
-      )
+      setData(urlSnap.data())
+      setStored(true)
+
     } else {
       console.log("Data not stored")
       setStored(false)
@@ -102,27 +100,28 @@ export default function ContentScript() {
   }
 
   async function getCurrentUser() {
-      var promise = new Promise(function(resolve, reject) {
-        chrome.storage.sync.get(['user'], function(result) {
 
-          if(result.user) {
-            resolve(result.user)
-          } else {
-            reject("No user found")
-          }
-        })
+    var promise = new Promise(function(resolve, reject) {
+      chrome.storage.sync.get(['user'], function(result) {
+        if(result.user) {
+          resolve(result.user)
+        } else {
+          reject("No user found")
+        }
       })
-      promise.then(function(result) {
-        console.log("User found: ", result)
-        setCurrentUser(result)
+    })
 
-        userData()  // Start searching for user data
-      }, function(err) {
-        console.log(err); // Error: "It broke"
-      });
+    promise.then(function(result) {
+      console.log("User found: ", result)
+      setCurrentUser(result)
+
+      userData()  // Start searching for user data
+    }, function(err) {
+      console.log(err); // Error: "It broke"
+    });
   }
 
-  function fillInputs(data) {
+  function fillInputs() {
     for(let input of inputs) {
       try {
         input.value = data[input.id]
@@ -134,7 +133,7 @@ export default function ContentScript() {
   
   async function storeInputs() {
     console.log("Storing the inputs")
-    console.error("Inputs: ", inputs, "Url: ", url, "User: ", currentUser)
+
     const urlDoc = doc(db, "users", currentUser, "data", url)
     await setDoc(urlDoc, {})
 
