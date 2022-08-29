@@ -5,9 +5,12 @@ import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 import './ContentScript.css'
 
 export default function ContentScript() {
-  var inputs, url, currentUser
   const [isStored, setStored] = useState()
+
+  const [inputs, setInputs] = useState()
   const [form, setForm] = useState()
+  const [url, setUrl] = useState()
+  const [currentUser, setCurrentUser] = useState()
 
   useEffect(() => {
     constructor()
@@ -15,32 +18,31 @@ export default function ContentScript() {
   }, [])
 
   useEffect(() => {
-    console.log("form: ", form)
+
     if(isStored === false) {
       console.log("Waiting for user to send data")
-      
-      form.addEventListener("submit", function(e) {
-        console.log("Connect button as been clicked")
-        storeInputs()
-      })
 
-      return () => form.removeEventListener("submit", storeInputs)
+      // document.getElementsByTagName('form')[0].addEventListener
+
+      form.addEventListener('submit', function(e) {
+        console.log("Form submitted")
+        storeInputs()
+        e.preventDefault()
+      })
     }
 
     // eslint-disable-next-line
   }, [isStored])
 
   const constructor = function() {
-    inputs = getInputs()
-    if(!inputs) return 
 
-    getForm()
-    if(!form) return 
+    setInputs(getInputs())
+    setForm(getForm())
+    setUrl(getUrl())
 
-    url = getUrl()
-    if(!url) return
+    console.log("Inputs: ", inputs, "Form: ", form, "Url: ", url)
 
-    getCurrentUser()  // This an async function, so we need to wait for it to search user in local storage
+    getCurrentUser()
   }
 
   // Search the data of the user
@@ -87,12 +89,9 @@ export default function ContentScript() {
     }
 
   }
-  
-  // inputs[0].form
+
   function getForm() {
-    const currentForm = document.getElementsByTagName('form')[0]
-    setForm(currentForm)
-    console.log("Form is: ", currentForm)
+    return document.getElementsByTagName('form')[0]
   }
   
   function getUrl() {
@@ -115,7 +114,7 @@ export default function ContentScript() {
       })
       promise.then(function(result) {
         console.log("User found: ", result)
-        currentUser = result
+        setCurrentUser(result)
 
         userData()  // Start searching for user data
       }, function(err) {
@@ -135,6 +134,7 @@ export default function ContentScript() {
   
   async function storeInputs() {
     console.log("Storing the inputs")
+    console.error("Inputs: ", inputs, "Url: ", url, "User: ", currentUser)
     const urlDoc = doc(db, "users", currentUser, "data", url)
     await setDoc(urlDoc, {})
 
