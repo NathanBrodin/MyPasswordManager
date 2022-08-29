@@ -51,6 +51,13 @@
     pointer-events: none;
 }
 
+.input:focus, input:hover {
+    outline: none;
+    border-color: rgba(234,76,137,0.4);
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgb(234 76 137 / 10%);
+}
+
 .input:focus, .input:valid {
     outline: none;
     border: 1px solid var(--link-color);

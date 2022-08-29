@@ -5,26 +5,28 @@ import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 import './ContentScript.css'
 
 export default function ContentScript() {
-  var inputs, form, url, currentUser
+  var inputs, url, currentUser
   const [isStored, setStored] = useState()
+  const [form, setForm] = useState()
 
   useEffect(() => {
     constructor()
     // eslint-disable-next-line
   }, [])
 
-  // Wait for user to send his data
   useEffect(() => {
+    console.log("form: ", form)
     if(isStored === false) {
       console.log("Waiting for user to send data")
       
       form.addEventListener("submit", function(e) {
+        console.log("Connect button as been clicked")
         storeInputs()
-        e.preventDefault();
       })
 
       return () => form.removeEventListener("submit", storeInputs)
     }
+
     // eslint-disable-next-line
   }, [isStored])
 
@@ -32,7 +34,7 @@ export default function ContentScript() {
     inputs = getInputs()
     if(!inputs) return 
 
-    form = getForm()
+    getForm()
     if(!form) return 
 
     url = getUrl()
@@ -86,9 +88,11 @@ export default function ContentScript() {
 
   }
   
+  // inputs[0].form
   function getForm() {
-    console.log("form is: ", inputs[0].form)
-    return inputs[0].form
+    const currentForm = document.getElementsByTagName('form')[0]
+    setForm(currentForm)
+    console.log("Form is: ", currentForm)
   }
   
   function getUrl() {
