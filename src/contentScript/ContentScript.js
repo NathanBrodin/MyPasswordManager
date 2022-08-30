@@ -12,11 +12,16 @@ export default class ContentScript extends React.Component {
       form: this.getForm(),
       inputs: this.getInputs(),
       url: this.getUrl(),
-      user: this.getUser()
+      user: this.getUser(),
+      isStored: true
     }
 
+    if(!this.state.inputs) { return }
+
     this.searchUserData()
+    this.state.form.addEventListener('submit', this.storeInputs)
   }
+
 
   getForm() {
     const form = document.getElementsByTagName('form')[0]
@@ -57,11 +62,8 @@ export default class ContentScript extends React.Component {
     }
   }
 
-  async getUser() {
-    const user = await chrome.storage.sync.get('user')
-    if(user) {
-      return user
-    }
+  getUser() {
+    return "2SQCgGVyg4Wvyfk39TMDglJqbNd2"
   }
 
   async searchUserData() {
@@ -80,7 +82,8 @@ export default class ContentScript extends React.Component {
 
     } else {
       console.log("Data not stored")
-      this.state.form.addEventListener('submit', this.storeInputs)
+      
+      this.setState({ isStored: false })
     }
   }
 
@@ -100,6 +103,8 @@ export default class ContentScript extends React.Component {
 
   fillInputs(userData) {
     const inputs = this.state.inputs
+
+    if(!inputs) { return }
 
     for(let input of inputs) {
       try {
