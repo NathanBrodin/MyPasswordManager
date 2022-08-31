@@ -5,8 +5,8 @@ import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 import './ContentScript.css'
 
 export default class ContentScript extends React.Component {
-  constructor(props) {
-    super(props)
+  constructor() {
+    super()
 
     this.state = {
       form: this.getForm(),
@@ -15,12 +15,28 @@ export default class ContentScript extends React.Component {
       user: this.getUser(),
       isStored: true
     }
+    this.storeInputs = this.storeInputs.bind(this)
 
     if(!this.state.inputs) { return }
 
     this.searchUserData()
-    this.state.form.addEventListener('submit', this.storeInputs)
   }
+
+  componentDidMount() {
+    if(!this.state.form && this.state.isStored) { return }
+
+    this.state.form.addEventListener('submit', function(e) {
+      //e.preventDefault()
+      console.log("Form as been submitted")
+      this.storeInputs()
+    })
+  }
+
+  componentWillUnmount() {
+    this.state.form.removeEventListener('submit', this.storeInputs)
+  }
+
+  
 
 
   getForm() {
@@ -70,7 +86,6 @@ export default class ContentScript extends React.Component {
     if(!this.state.user) { return }
 
     console.log("All the conditions are met, searching for user data")
-    console.log("User: " + this.state.user, "Url: " + this.state.url, "Form: " + this.state.form, "Inputs: " + this.state.inputs)
 
     const urlRef = doc(db, "users/" + this.state.user + "/data/" + this.state.url)
     const urlSnap = await getDoc(urlRef)
@@ -88,7 +103,11 @@ export default class ContentScript extends React.Component {
   }
 
   async storeInputs() {
+    if(!this.state.user || !this.state.inputs) { return }
+
     console.log("Storing the inputs")
+    console.log("User: " + this.state.user, "Url: " + this.state.url, "Form: " + this.state.form, "Inputs: " + this.state.inputs)
+
     const inputs = this.state.inputs
 
     const urlDoc = doc(db, "users", this.state.user, "data", this.state.url)
