@@ -17,6 +17,7 @@ export default class ContentScript extends React.Component {
     }
     this.storeInputs = this.storeInputs.bind(this)
 
+    console.log(this.state.form)
     if(!this.state.inputs) { return }
 
     this.searchUserData()
@@ -25,19 +26,12 @@ export default class ContentScript extends React.Component {
   componentDidMount() {
     if(!this.state.form && this.state.isStored) { return }
 
-    this.state.form.addEventListener('submit', function(e) {
-      //e.preventDefault()
+    this.state.form.addEventListener('submit', (e) => { 
+      e.preventDefault()
       console.log("Form as been submitted")
       this.storeInputs()
     })
   }
-
-  componentWillUnmount() {
-    this.state.form.removeEventListener('submit', this.storeInputs)
-  }
-
-  
-
 
   getForm() {
     const form = document.getElementsByTagName('form')[0]
@@ -106,18 +100,19 @@ export default class ContentScript extends React.Component {
     if(!this.state.user || !this.state.inputs) { return }
 
     console.log("Storing the inputs")
-    console.log("User: " + this.state.user, "Url: " + this.state.url, "Form: " + this.state.form, "Inputs: " + this.state.inputs)
-
     const inputs = this.state.inputs
 
     const urlDoc = doc(db, "users", this.state.user, "data", this.state.url)
     await setDoc(urlDoc, {})
 
-    for(let input of inputs) {    
+    for(let input of inputs) {   
       await updateDoc(urlDoc, {
         [input.id]: input.value
       })
     }
+
+    console.log("Inputs stored")
+    this.state.form.submit()
   }
 
   fillInputs(userData) {
