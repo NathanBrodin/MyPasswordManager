@@ -30,13 +30,11 @@ export function AuthProvider({ children }) {
     async function createNewUserData(user) {
         try {
             await setDoc(doc(db, "users", user.uid), {
-                email: user.email
+                email: user.email,
+                autoSubmit: false
             })
             await addDoc(collection(db, "users", user.uid, "data"), {
 
-            })
-            await addDoc(collection(db, "users", user.uid, "preferences"), {
-                autoSubmit: false
             })
         } catch (e) {
             console.error("Error adding new user in database: ", e)

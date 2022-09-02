@@ -15,10 +15,12 @@ export default class ContentScript extends React.Component {
       user: this.getUser(),
       isStored: true
     }
+
+    if(!this.state.url) { return }
+
     this.storeInputs = this.storeInputs.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
 
-    console.log(this.state.form)
     if(!this.state.inputs) { return }
 
     this.searchUserData()
@@ -65,9 +67,12 @@ export default class ContentScript extends React.Component {
     let url = (new URL(window.location.href))
     url = url.hostname.replace('www.', '')
 
-    if(url) {
+    const banned_urls = ["google.com", "search.brave.com", "stackoverflow.com"]
+    console.log(url)
+    if(url && !banned_urls.includes(url)) {
       return url
     }
+    return undefined
   }
 
   getUser() {
@@ -137,13 +142,10 @@ export default class ContentScript extends React.Component {
   render() {
     return (
       <div className='extension-container'>
-        <button onClick={this.handleSubmit}>
+        <button className='extension-button' onClick={this.handleSubmit}>
           <div className="svg-wrapper-1">
             <div className="svg-wrapper">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                <path fill="none" d="M0 0h24v24H0z"></path>
-                <path fill="currentColor" d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"></path>
-              </svg>
+            <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path d="M1 14.5a6.496 6.496 0 0 1 3.064-5.519 8.001 8.001 0 0 1 15.872 0 6.5 6.5 0 0 1-2.936 12L7 21c-3.356-.274-6-3.078-6-6.5zm15.848 4.487a4.5 4.5 0 0 0 2.03-8.309l-.807-.503-.12-.942a6.001 6.001 0 0 0-11.903 0l-.12.942-.805.503a4.5 4.5 0 0 0 2.029 8.309l.173.013h9.35l.173-.013zM13 12h3l-4 5-4-5h3V8h2v4z" fill="currentColor"></path></svg>
             </div>
           </div>
           <span>Save</span>

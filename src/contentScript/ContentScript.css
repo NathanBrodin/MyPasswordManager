@@ -1,53 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500&display=swap');
+
 .extension-container {
+    font-family: 'Raleway', sans-serif;
     width: 100%;
     height: 100%;
 }
 
 /* From uiverse.io by @adamgiebl */
-button {
-    font-family: inherit;
-    font-size: 20px;
-    background: royalblue;
+.extension-button {
+    font-size: 1rem;
+    background: #EEBE01;
     color: white;
     padding: 0.7em 1em;
     padding-left: 0.9em;
     display: flex;
     align-items: center;
     border: none;
-    border-radius: 16px;
+    border-radius: 3vw;
     overflow: hidden;
     transition: all 0.2s;
-   }
+}
    
-   button span {
+.extension-button span {
     display: block;
     margin-left: 0.3em;
     transition: all 0.3s ease-in-out;
-   }
+}
    
-   button svg {
+.extension-button svg {
     display: block;
     transform-origin: center center;
     transition: transform 0.3s ease-in-out;
-   }
+}
    
-   button:hover .svg-wrapper {
+.extension-button:hover .svg-wrapper {
     animation: fly-1 0.6s ease-in-out infinite alternate;
-   }
+}
    
-   button:hover svg {
-    transform: translateX(1.2em) rotate(45deg) scale(1.1);
-   }
+.extension-button:hover svg {
+    transform: translateX(1.2em) scale(1.1);
+}
    
-   button:hover span {
+.extension-button:hover span {
     transform: translateX(5em);
-   }
+}
    
-   button:active {
+.extension-button:active {
     transform: scale(0.95);
-   }
+}
    
-   @keyframes fly-1 {
+@keyframes fly-1 {
     from {
      transform: translateY(0.1em);
     }
@@ -55,6 +57,6 @@ button {
     to {
      transform: translateY(-0.1em);
     }
-   }
+}
    
    
