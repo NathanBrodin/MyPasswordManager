@@ -5,6 +5,8 @@ import { db } from '../firebase'
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 import './ContentScript.css'
 
+// TODO: Get current user, generate user key
+
 export default class ContentScript extends React.Component {
   constructor() {
     super()
