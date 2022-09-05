@@ -16,12 +16,10 @@ export default class ContentScript extends React.Component {
       isStored: true
     }
 
-    if(!this.state.url) { return }
+    if(!this.state.url || !this.state.inputs) { return }
 
     this.storeInputs = this.storeInputs.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-
-    if(!this.state.inputs) { return }
 
     this.searchUserData()
   }
@@ -44,17 +42,26 @@ export default class ContentScript extends React.Component {
     var inputs = document.getElementsByTagName('input')
     inputs = Object.values(inputs).filter(this.filterInputs)
 
-    if(inputs.length) {
+    let isFormPage = false
+    for(let input of inputs) {
+      console.log(input.type)
+      if(input.type === "password") {
+        isFormPage = true
+      }
+    }
+
+    if(inputs.length && isFormPage) {
       return inputs
     }
+    return undefined
   }
   
   filterInputs(input) {
     switch (input.type) {
       case "email":
-      case "password":
       case "text":
-      case "tel":    
+      case "tel": 
+      case "password":
         return true
     
       default:
@@ -67,9 +74,7 @@ export default class ContentScript extends React.Component {
     let url = (new URL(window.location.href))
     url = url.hostname.replace('www.', '')
 
-    const banned_urls = ["google.com", "search.brave.com", "stackoverflow.com"]
-    console.log(url)
-    if(url && !banned_urls.includes(url)) {
+    if(url) {
       return url
     }
     return undefined
@@ -140,6 +145,9 @@ export default class ContentScript extends React.Component {
   }
 
   render() {
+    if(!this.state.inputs) { return(
+      <div></div>
+    ) }
     return (
       <div className='extension-container'>
         <button className='extension-button' onClick={this.handleSubmit}>
