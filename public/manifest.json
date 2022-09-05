@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "short_name": "MyPasswordManager",
   "name": "My Password Manager",
-  "description": "My own chrome extension to store my password, autofill my email and password in log-in page",
+  "description": "My own chrome extension to store password, autofill email and password in log-in page",
   "action": {
     "default_title": "MyPasswordManager",
     "default_popup": "popup.html",
@@ -30,6 +30,6 @@
     "128": "img/icon-128.png"
   },
   "options_page": "options.html",
-  "permissions": ["scripting","activeTab", "storage", "identity", "identity.email"],
+  "permissions": ["scripting","activeTab", "storage"],
   "host_permissions": ["*://*/*"]
 }

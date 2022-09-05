@@ -1,5 +1,6 @@
 /* global chrome */
 import React from 'react'
+import CryptoJS from 'crypto-js'
 import { db } from '../firebase'
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 import './ContentScript.css'
@@ -44,7 +45,6 @@ export default class ContentScript extends React.Component {
 
     let isFormPage = false
     for(let input of inputs) {
-      console.log(input.type)
       if(input.type === "password") {
         isFormPage = true
       }
@@ -82,11 +82,6 @@ export default class ContentScript extends React.Component {
 
   getUser() {
     return "2SQCgGVyg4Wvyfk39TMDglJqbNd2"
-    /*
-    chrome.identity.getProfileUserInfo(function(userInfo) {
-         this.setState({ user: userInfo.id })
-     });
-     */
   }
 
   async searchUserData() {
@@ -120,7 +115,7 @@ export default class ContentScript extends React.Component {
 
     for(let input of inputs) {   
       await updateDoc(urlDoc, {
-        [input.id]: input.value
+        [input.id]: CryptoJS.AES.encrypt(input.value, 'my-secret-key@123').toString() // Encrypt the data before storing
       })
     }
 
@@ -135,7 +130,8 @@ export default class ContentScript extends React.Component {
 
     for(let input of inputs) {
       try {
-        input.value = userData[input.id]
+        let bytes = CryptoJS.AES.decrypt(userData[input.id], 'my-secret-key@123')  // Decrypt the data stored
+        input.value = bytes.toString(CryptoJS.enc.Utf8)
       } catch(e) {
         console.log("Data of input [" + input.id + "] was not found, " + e)
       }
