@@ -83,6 +83,10 @@ export default class ContentScript extends React.Component {
   }
 
   getUser() {
+    /*
+    chrome.storage.sync.get(['user']).then( (result) => { 
+      this.setState({ user: result.user })
+    }) */
     return "2SQCgGVyg4Wvyfk39TMDglJqbNd2"
   }
 
