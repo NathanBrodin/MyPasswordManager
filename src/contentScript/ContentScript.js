@@ -123,7 +123,7 @@ export default class ContentScript extends React.Component {
     this.state.form.submit()
   }
 
-  fillInputs(userData) {
+  async fillInputs(userData) {
     const inputs = this.state.inputs
 
     if(!inputs) { return }
@@ -137,7 +137,11 @@ export default class ContentScript extends React.Component {
       }
     }
 
-    //this.state.form.submit()
+    const urlRef = doc(db, "users/" + this.state.user)
+    const urlSnap = await getDoc(urlRef)
+    if(urlSnap.data().autoSubmit === true) {
+      this.state.form.submit()
+    }
   }
 
   render() {
