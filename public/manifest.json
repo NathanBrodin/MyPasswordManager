@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
-  "version": "0.0.1",
+  "version": "1.0.0",
   "short_name": "MyPasswordManager",
   "name": "My Password Manager",
-  "description": "My own chrome extension to store password, autofill email and password in log-in page",
+  "description": "Chrome extension to store and fill inputs of any website",
   "action": {
     "default_title": "MyPasswordManager",
     "default_popup": "popup.html",
