@@ -1,16 +1,20 @@
 import React from "react"
 import Dashboard from "./components/Dashboard"
-import Signup from "./components/Signup"
-import Login from "./components/Login"
-import ForgotPassword from "./components/ForgotPassword"
-import UpdateProfile from "./components/UpdateProfile"
 import { AuthProvider } from "./contexts/AuthContext"
-import { HashRouter as Router, Route, Routes } from "react-router-dom"
+//import { HashRouter as Router, Route, Routes } from "react-router-dom"
+import { Router } from "react-chrome-extension-router"
 import PrivateRoute from "./components/PrivateRoute"
 import './App.css'
 
 function App() {
   return (
+    <AuthProvider>
+      <Router>
+        <Dashboard />
+      </Router>
+    </AuthProvider>
+
+    /*
     <Router>
       <AuthProvider>
         <Routes>
@@ -22,6 +26,7 @@ function App() {
         </Routes>
       </AuthProvider>
     </Router>
+    */
   )
 }
 

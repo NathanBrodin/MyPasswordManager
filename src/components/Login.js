@@ -1,6 +1,9 @@
 import React, { useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { goTo, Link } from 'react-chrome-extension-router'
 import { useAuth } from '../contexts/AuthContext'
+import Dashboard from './Dashboard'
+import Signup from './Signup'
+import ForgotPassword from './ForgotPassword'
 
 export default function Login() {
     const emailRef = useRef()
@@ -9,7 +12,6 @@ export default function Login() {
     const { login } = useAuth()
     const [error, setError] = useState("") 
     const [loading, setLoading] = useState(false)
-    let navigate = useNavigate()
 
     async function handleSubmit(e) {
         e.preventDefault()
@@ -19,7 +21,7 @@ export default function Login() {
             setLoading(true)
 
             await login(emailRef.current.value, passwordRef.current.value)    
-            navigate("/")
+            goTo(Dashboard)
         } catch {
             setError("Failed to log In")
             console.error(error);
@@ -41,9 +43,9 @@ export default function Login() {
                 </div>
                 <button className='submit-button' disabled={loading} type="submit">Log In</button>
             </form>
-            <Link to="/forgot-password">Forgot Password ?</Link>
+            <Link component={ForgotPassword}>Forgot Password ?</Link>
             <div className='text'>
-                Need an account ? <Link to="/signup">Sign Up</Link>
+                Need an account ? <Link component={Signup}>Sign Up</Link>
             </div>
         </div>
     )

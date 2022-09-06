@@ -1,18 +1,19 @@
 import React, { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
-import { Link, useNavigate } from 'react-router-dom'
+import { goTo, Link } from 'react-chrome-extension-router'
 import logo from '../logo.svg';
+import Login from './Login'
+import UpdateProfile from './UpdateProfile';
 
 export default function Dashboard() {
     const { currentUser, logout, getAutoSubmit, updateAutoSubmit } = useAuth()
     const [checked, setChecked] = useState(false)
     initAutoSubmit()
-    const navigate = useNavigate()
 
     async function handleLogout() {
         try {
             await logout()
-            navigate("/login")
+            goTo(Login)
         } catch {
             console.error("Failed to log out")
         }
@@ -38,7 +39,6 @@ export default function Dashboard() {
         <header>
             <img src={logo} className="App-logo" alt="logo" />
             <h2>My Password Manager</h2>
-            <Link to="/update-profile">Settings</Link>
         </header>
         <div className='profile-container'>
             <h2>Profile</h2>
@@ -48,7 +48,7 @@ export default function Dashboard() {
             <p>Id: {currentUser.uid}</p>
         </div>
         <div className='logout-container'>
-            <Link to="/update-profile">Update Profile</Link>
+            <Link component={UpdateProfile}>Update Profile</Link>
             <button className='submit-button' onClick={handleLogout}>Log Out</button>    
         </div>
     </div>

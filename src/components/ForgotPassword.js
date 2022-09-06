@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { goTo, Link } from 'react-chrome-extension-router'
 import { useAuth } from '../contexts/AuthContext'
+import Dashboard from './Dashboard'
+import Signup from './Signup'
 
 export default function ForgotPassword() {
     const emailRef = useRef()
@@ -11,7 +13,6 @@ export default function ForgotPassword() {
         // eslint-disable-next-line
     const [message, setMessage] = useState("") 
     const [loading, setLoading] = useState(false)
-    const navigate = useNavigate()
 
     async function handleSubmit(e) {
         e.preventDefault()
@@ -23,7 +24,7 @@ export default function ForgotPassword() {
 
             await resetPassword(emailRef.current.value)
             setMessage("Check your inbox for further instructions")
-            navigate("/", { replace: true })
+            goTo(Dashboard)
         } catch {
             setError("Failed to reset password")
         }
@@ -40,7 +41,7 @@ export default function ForgotPassword() {
                 <button className='submit-button' disabled={loading} type="submit">Reset Password</button>
             </form>
             <div className='text'>
-                Need an account ? <Link to="/signup">Sign Up</Link>
+                Need an account ? <Link component={Signup}>Sign Up</Link>
             </div>
         </div>
     )

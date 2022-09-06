@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
-import { Link, useNavigate } from 'react-router-dom'
+import { goTo, Link } from 'react-chrome-extension-router'
+import Dashboard from './Dashboard'
 
 export default function UpdateProfile() {
     const emailRef = useRef()
@@ -11,7 +12,6 @@ export default function UpdateProfile() {
     // eslint-disable-next-line
     const [error, setError] = useState("") 
     const [loading, setLoading] = useState(false)
-    const navigate = useNavigate()
 
     function handleSubmit(e) {
         e.preventDefault()
@@ -32,7 +32,7 @@ export default function UpdateProfile() {
         }
 
         Promise.all(promises).then (() => {
-            navigate("/", { replace: true })
+            goTo(Dashboard)
         }).catch(() => {
             setError("Failed to update account")
         }).finally(() => {
@@ -61,7 +61,7 @@ export default function UpdateProfile() {
                 <button className='submit-button' disabled={loading} type="submit">Update</button>
             </form>
             <div className='text'>
-                <Link to="/signup">Cancel</Link>
+                <Link component={Dashboard}>Cancel</Link>
             </div>
         </div>
     )

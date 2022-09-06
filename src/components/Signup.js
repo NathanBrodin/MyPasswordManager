@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
-import { Link, useNavigate } from 'react-router-dom'
+import { goTo, Link } from 'react-chrome-extension-router'
+import Dashboard from './Dashboard'
+import Login from './Login'
 
 export default function Signup() {
     const emailRef = useRef()
@@ -11,7 +13,6 @@ export default function Signup() {
         // eslint-disable-next-line
     const [error, setError] = useState("") 
     const [loading, setLoading] = useState(false)
-    const navigate = useNavigate()
 
     async function handleSubmit(e) {
         e.preventDefault()
@@ -25,7 +26,7 @@ export default function Signup() {
             setLoading(true)
 
             await signup(emailRef.current.value, passwordRef.current.value)
-            navigate("/", { replace: true })
+            goTo(Dashboard)
         } catch {
             setError("Failed to create an account")
         }
@@ -52,7 +53,7 @@ export default function Signup() {
                 <button className='submit-button' disabled={loading} type="submit">Sign Up</button>
             </form>
             <div className='text'>
-                Already have an account? <Link to="/login">Log In</Link>
+                Already have an account? <Link component={Login}>Log In</Link>
             </div>
         </div>
     )
