@@ -1,9 +1,8 @@
 #extension-root {
-    width: 6.2vw;
-    height: 1.6vw;
-    padding: 0.5vw;
     position: fixed;
     top: 0;
     right: 0;
+    margin-top: 0.5vw;
+    margin-right: 0.5vw;
     z-index: 2147483647;
 }
