@@ -1,37 +1,51 @@
 import React, { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
+import logo from '../logo.svg';
 
-export default function Dashboard() {
-    // eslint-disable-next-line
-    const [error, setError] = useState("")
-    const { currentUser, logout } = useAuth()
+export default async function Dashboard() {
+    const { currentUser, logout, getAutoSubmit, updateAutoSubmit } = useAuth()
+    await getAutoSubmit()
+    const [checked, setChecked] = useState(false)
     const navigate = useNavigate()
 
     async function handleLogout() {
-        setError("")
-
         try {
             await logout()
             navigate("/login")
         } catch {
-            setError("Failed to log out")
+            console.error("Failed to log out")
+        }
+    }
+
+    async function handleAutoSubmitChange() {
+        if(checked) {
+            await updateAutoSubmit(false)
+            setChecked(false)
+        } else {
+            await updateAutoSubmit(true)
+            setChecked(true)
         }
     }
 
   return (
     <div className='component-container'>
-            <h1 className='title'>Profile</h1>
-            <p>Welcome to My Password Manager</p>
-            <br/>
-            <h3>Your profile infos: </h3>
-            <br/>
-            <strong>Email: </strong>{currentUser.email}
-            <strong>ID: </strong>{currentUser.uid}
-            <br/>
-            <Link to="/update-profile">Update Profile</Link>
-            <br/>
-            <button className='submit-button' onClick={handleLogout}>Log Out</button>           
+        <header>
+            <img src={logo} className="App-logo" alt="logo" />
+            <h2>My Password Manager</h2>
+            <Link to="/update-profile">Settings</Link>
+        </header>
+        <div className='profile-container'>
+            <h2>Profile</h2>
+            <input id='checkbox' className='checkbox' type="checkbox" checked={checked} onChange={handleAutoSubmitChange}/>
+            <label htmlFor='checkbox'>Enable auto-submit</label>
+            <p>Email: {currentUser.email}</p>
+            <p>Id: {currentUser.uid}</p>
         </div>
+        <div className='logout-container'>
+            <Link to="/update-profile">Update Profile</Link>
+            <button className='submit-button' onClick={handleLogout}>Log Out</button>    
+        </div>
+    </div>
   )
 }
