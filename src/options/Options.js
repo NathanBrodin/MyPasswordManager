@@ -7,7 +7,7 @@ export default function Options() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Otpions not developed yet
+          Options not developed yet
         </p>
         <a
           className="App-link"
@@ -15,7 +15,7 @@ export default function Options() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Go to Github
+          Go to MyPasswordManager Github
         </a>
       </header>
     </div>

@@ -3,7 +3,7 @@ import React, { useContext, createContext, useEffect, useState } from 'react'
 import CryptoJS from 'crypto-js'
 import { auth, db } from "../firebase"
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail} from "firebase/auth"
-import { addDoc, doc, setDoc, collection } from 'firebase/firestore'
+import { addDoc, doc, setDoc, updateDoc, getDoc, collection } from 'firebase/firestore'
 
 const AuthContext = createContext()
 
@@ -82,6 +82,27 @@ export function AuthProvider({ children }) {
     function updatePassword (password) {
         return currentUser.updatePassword(password)
     }
+
+    async function getAutoSubmit() {
+        const docRef = doc(db, "users", currentUser.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            return docSnap.data().autoSubmit
+        } else {
+            return false
+        }
+    }
+
+    async function updateAutoSubmit (autoSubmit) {
+        try {
+            await updateDoc(doc(db, "users", currentUser.uid), {
+                autoSubmit: autoSubmit
+            })
+        } catch (e) {
+            console.error("Error updating autoSubmit in database: ", e)
+        }
+    }
     
     function saveCurrentUser(currentUser) {
         if(!currentUser) {
@@ -123,7 +144,9 @@ export function AuthProvider({ children }) {
         logout,
         resetPassword,
         updateEmail,
-        updatePassword
+        updatePassword,
+        getAutoSubmit,
+        updateAutoSubmit
     }
 
     return (
