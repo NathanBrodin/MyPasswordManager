@@ -3,10 +3,10 @@ import { useAuth } from '../contexts/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
 import logo from '../logo.svg';
 
-export default async function Dashboard() {
+export default function Dashboard() {
     const { currentUser, logout, getAutoSubmit, updateAutoSubmit } = useAuth()
-    await getAutoSubmit()
     const [checked, setChecked] = useState(false)
+    initAutoSubmit()
     const navigate = useNavigate()
 
     async function handleLogout() {
@@ -26,6 +26,11 @@ export default async function Dashboard() {
             await updateAutoSubmit(true)
             setChecked(true)
         }
+    }
+
+    async function initAutoSubmit() {
+        const autoSubmit = await getAutoSubmit()
+        setChecked(autoSubmit)
     }
 
   return (
