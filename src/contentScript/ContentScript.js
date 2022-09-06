@@ -5,8 +5,6 @@ import { db } from '../firebase'
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 import './ContentScript.css'
 
-// TODO: Get current user, generate user key
-
 export default class ContentScript extends React.Component {
   constructor() {
     super()
@@ -15,16 +13,18 @@ export default class ContentScript extends React.Component {
       form: this.getForm(),
       inputs: this.getInputs(),
       url: this.getUrl(),
-      user: this.getUser(),
-      isStored: true
+      user: undefined,
+      isStored: true,
+      key: undefined
     }
 
     if(!this.state.url || !this.state.inputs) { return }
 
     this.storeInputs = this.storeInputs.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.searchUserData = this.searchUserData.bind(this)
 
-    this.searchUserData()
+    this.getUser()
   }
 
   handleSubmit() {
@@ -83,11 +83,17 @@ export default class ContentScript extends React.Component {
   }
 
   getUser() {
-    /*
+    chrome.storage.sync.get(['key']).then( (result) => { 
+      // eslint-disable-next-line
+      this.state.key = result.key
+    })
+
     chrome.storage.sync.get(['user']).then( (result) => { 
-      this.setState({ user: result.user })
-    }) */
-    return "2SQCgGVyg4Wvyfk39TMDglJqbNd2"
+      // eslint-disable-next-line
+      this.state.user = result.user
+
+      this.searchUserData()
+    })
   }
 
   async searchUserData() {
@@ -109,7 +115,7 @@ export default class ContentScript extends React.Component {
       this.setState({ isStored: false })
     }
   }
-
+  
   async storeInputs() {
     if(!this.state.user || !this.state.inputs) { return }
 
@@ -121,7 +127,7 @@ export default class ContentScript extends React.Component {
 
     for(let input of inputs) {   
       await updateDoc(urlDoc, {
-        [input.id]: CryptoJS.AES.encrypt(input.value, 'my-secret-key@123').toString() // Encrypt the data before storing
+        [input.id]: CryptoJS.AES.encrypt(input.value, this.state.key).toString() // Encrypt the data before storing
       })
     }
 
@@ -136,7 +142,7 @@ export default class ContentScript extends React.Component {
 
     for(let input of inputs) {
       try {
-        let bytes = CryptoJS.AES.decrypt(userData[input.id], 'my-secret-key@123')  // Decrypt the data stored
+        let bytes = CryptoJS.AES.decrypt(userData[input.id], this.state.key)  // Decrypt the data stored
         input.value = bytes.toString(CryptoJS.enc.Utf8)
       } catch(e) {
         console.log("Data of input [" + input.id + "] was not found, " + e)

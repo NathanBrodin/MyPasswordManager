@@ -1,5 +1,6 @@
 /* global chrome */
 import React, { useContext, createContext, useEffect, useState } from 'react'
+import CryptoJS from 'crypto-js'
 import { auth, db } from "../firebase"
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail} from "firebase/auth"
 import { addDoc, doc, setDoc, collection } from 'firebase/firestore'
@@ -39,6 +40,7 @@ export function AuthProvider({ children }) {
         } catch (e) {
             console.error("Error adding new user in database: ", e)
         }
+
     }
 
     function login(email, password) {
@@ -88,9 +90,19 @@ export function AuthProvider({ children }) {
               })
         }
 
+        chrome.storage.sync.set({key: generateSecretKey()}, function() {
+            console.log('Secret key generated')
+          })
+
         return chrome.storage.sync.set({user: currentUser.uid}, function() {
             console.log('User set to ' + currentUser.uid)
           })
+
+        
+    }
+
+    function generateSecretKey() {
+        return CryptoJS.lib.WordArray.random(128/8).toString()
     }
 
     useEffect(() => {
@@ -101,6 +113,7 @@ export function AuthProvider({ children }) {
         })
 
         return unsubscribe
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const value = {
