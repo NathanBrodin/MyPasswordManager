@@ -5,12 +5,16 @@ import { AuthProvider } from "./contexts/AuthContext"
 import { Router } from "react-chrome-extension-router"
 import PrivateRoute from "./components/PrivateRoute"
 import './App.css'
+import Login from "./components/Login"
+import Signup from "./components/Signup"
 
 function App() {
   return (
     <AuthProvider>
       <Router>
-        <Dashboard />
+        <PrivateRoute>
+          <Dashboard />
+        </PrivateRoute>
       </Router>
     </AuthProvider>
 
