@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { goTo, Link } from 'react-chrome-extension-router'
-import Dashboard from './Dashboard'
+import PrivateRoute from './PrivateRoute'
 
 export default function UpdateProfile() {
     const emailRef = useRef()
@@ -32,7 +32,7 @@ export default function UpdateProfile() {
         }
 
         Promise.all(promises).then (() => {
-            goTo(Dashboard)
+            goTo(PrivateRoute)
         }).catch(() => {
             setError("Failed to update account")
         }).finally(() => {
@@ -61,7 +61,7 @@ export default function UpdateProfile() {
                 <button className='submit-button' disabled={loading} type="submit">Update</button>
             </form>
             <div className='text'>
-                <Link component={Dashboard}>Cancel</Link>
+                <Link component={PrivateRoute}>Cancel</Link>
             </div>
         </div>
     )

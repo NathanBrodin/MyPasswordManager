@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react'
 import { goTo, Link } from 'react-chrome-extension-router'
 import { useAuth } from '../contexts/AuthContext'
-import Dashboard from './Dashboard'
 import Signup from './Signup'
 import ForgotPassword from './ForgotPassword'
+import PrivateRoute from './PrivateRoute'
 
 export default function Login() {
     const emailRef = useRef()
@@ -21,7 +21,7 @@ export default function Login() {
             setLoading(true)
 
             await login(emailRef.current.value, passwordRef.current.value)    
-            goTo(Dashboard)
+            goTo(PrivateRoute)
         } catch {
             setError("Failed to log In")
             console.error(error);

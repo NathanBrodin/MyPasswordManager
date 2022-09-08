@@ -1,12 +1,11 @@
 import React, { useRef, useState } from 'react'
 import { goTo, Link } from 'react-chrome-extension-router'
 import { useAuth } from '../contexts/AuthContext'
-import Dashboard from './Dashboard'
+import PrivateRoute from './PrivateRoute'
 import Signup from './Signup'
 
 export default function ForgotPassword() {
     const emailRef = useRef()
-    
     const { resetPassword } = useAuth()
         // eslint-disable-next-line
     const [error, setError] = useState("") 
@@ -24,7 +23,7 @@ export default function ForgotPassword() {
 
             await resetPassword(emailRef.current.value)
             setMessage("Check your inbox for further instructions")
-            goTo(Dashboard)
+            goTo(PrivateRoute)
         } catch {
             setError("Failed to reset password")
         }

@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { goTo, Link } from 'react-chrome-extension-router'
-import Dashboard from './Dashboard'
 import Login from './Login'
+import PrivateRoute from './PrivateRoute'
 
 export default function Signup() {
     const emailRef = useRef()
@@ -26,7 +26,7 @@ export default function Signup() {
             setLoading(true)
 
             await signup(emailRef.current.value, passwordRef.current.value)
-            goTo(Dashboard)
+            goTo(PrivateRoute)
         } catch {
             setError("Failed to create an account")
         }
