@@ -23,14 +23,14 @@ export default class ContentScript extends React.Component {
     this.storeInputs = this.storeInputs.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.searchUserData = this.searchUserData.bind(this)
+    this.encryptData = this.encryptData.bind(this)
+    this.decryptData = this.decryptData.bind(this)
 
     this.getUser()
   }
 
   handleSubmit() {
     if(!this.state.form && this.state.isStored) { return }
-
-    console.log("Submitting the form")
     this.storeInputs()
   }
 
@@ -91,27 +91,32 @@ export default class ContentScript extends React.Component {
     chrome.storage.sync.get(['user']).then( (result) => { 
       // eslint-disable-next-line
       this.state.user = result.user
-
       this.searchUserData()
     })
   }
 
+  encryptData(data, key) {
+    let encJson = CryptoJS.AES.encrypt(JSON.stringify(data), key).toString()
+    let encData = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(encJson))
+    return encData
+  }
+
+  decryptData(data, key) {
+    let decData = CryptoJS.enc.Base64.parse(data).toString(CryptoJS.enc.Utf8)
+    let decJson = CryptoJS.AES.decrypt(decData, key).toString(CryptoJS.enc.Utf8)
+    return JSON.parse(decJson)
+  }
+
   async searchUserData() {
     if(!this.state.user) { return }
-
-    console.log("All the conditions are met, searching for user data")
 
     const urlRef = doc(db, "users/" + this.state.user + "/data/" + this.state.url)
     const urlSnap = await getDoc(urlRef)
     
     // if url is stored, get values
     if(urlSnap.exists()) {
-      console.log("Data stored")
       this.fillInputs(urlSnap.data())
-
     } else {
-      console.log("Data not stored")
-      
       this.setState({ isStored: false })
     }
   }
@@ -119,7 +124,6 @@ export default class ContentScript extends React.Component {
   async storeInputs() {
     if(!this.state.user || !this.state.inputs) { return }
 
-    console.log("Storing the inputs")
     const inputs = this.state.inputs
 
     const urlDoc = doc(db, "users", this.state.user, "data", this.state.url)
@@ -127,11 +131,10 @@ export default class ContentScript extends React.Component {
 
     for(let input of inputs) {   
       await updateDoc(urlDoc, {
-        [input.id]: CryptoJS.AES.encrypt(input.value, this.state.key).toString() // Encrypt the data before storing
+        [input.id]: this.encryptData(input.value, this.state.key)
       })
     }
 
-    console.log("Inputs stored")
     this.state.form.submit()
   }
 
@@ -142,10 +145,9 @@ export default class ContentScript extends React.Component {
 
     for(let input of inputs) {
       try {
-        let bytes = CryptoJS.AES.decrypt(userData[input.id], this.state.key)  // Decrypt the data stored
-        input.value = bytes.toString(CryptoJS.enc.Utf8)
+        input.value = this.decryptData(userData[input.id], this.state.key)
       } catch(e) {
-        console.log("Data of input [" + input.id + "] was not found, " + e)
+        console.error("Data of input [" + input.id + "] was not found, " + e)
       }
     }
 

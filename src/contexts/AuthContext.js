@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
     const [loading, setLoading] = useState(true)
 
     function signup(email, password) {
-        createUserWithEmailAndPassword(auth, email, password)
+        return createUserWithEmailAndPassword(auth, email, password)
         .then((userCrendtial) => {
             createNewUserData(userCrendtial.user)
 
@@ -44,17 +44,11 @@ export function AuthProvider({ children }) {
     }
 
     function login(email, password) {
-        signInWithEmailAndPassword(auth, email, password)
-        .then((userCrendtial) => {
-            return userCrendtial.user
-        })
-        .catch((error) => {
-            console.error("Unable to sign in : " + error.code + error.message);
-        })
+        return signInWithEmailAndPassword(auth, email, password)
     }
 
     function logout() {
-        signOut(auth)
+        return signOut(auth)
         .then(() => {
             // Log out succesfull
             return
@@ -65,7 +59,7 @@ export function AuthProvider({ children }) {
     }
 
     function resetPassword(email) {
-        sendPasswordResetEmail(auth, email)
+        return sendPasswordResetEmail(auth, email)
         .then(() => {
             // Password reset email sent!
             return

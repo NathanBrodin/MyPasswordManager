@@ -32,6 +32,14 @@
     color: var(--title-color);
 }
 
+.error {
+    color: red;
+    background-color: rgba(234,76,137,0.4);
+    border-radius: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
 .form input{
     margin-top: 10px;
     background: var(--bg-color);
@@ -92,4 +100,9 @@
     text-decoration: none;
     font-style: italic;
     font-weight: bold;
+}
+
+header {
+    display: flex;
+    margin-top: 0;
 }

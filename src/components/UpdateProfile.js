@@ -44,7 +44,8 @@ export default function UpdateProfile() {
     return (
         <div className='component-container'>
             <h1 className='title'>Update Profile</h1>
-            <form className='form' onSubmit={handleSubmit}>
+            {error && <div className="error"> {error} </div>}
+            <form className='form' onSubmit={handleSubmit} autoComplete="off">
                 <div className='input-container'>
                     <input className='input' id='email' type='email' ref={emailRef} placeholder='Email' required defaultValue={currentUser.email}/>
                 </div>

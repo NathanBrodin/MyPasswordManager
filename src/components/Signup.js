@@ -20,6 +20,9 @@ export default function Signup() {
         if (passwordRef.current.value !== passwordConfirmRef.current.value) {
             return setError("Password do not match")
         }
+        if (passwordRef.current.value.length < 6) {
+            return setError("Password must be at least 6 characters")
+        }
         
         try {
             setError("")    // Reset the error
@@ -36,19 +39,16 @@ export default function Signup() {
     return (
         <div className='component-container'>
             <h1 className='title'>Sign Up</h1>
-            <form className='form' onSubmit={handleSubmit}>
+            {error && <div className="error"> {error} </div>}
+            <form className='form' onSubmit={handleSubmit} autoComplete="off">
                 <div className='input-container'>
                     <input className='input' id='email' type='email' ref={emailRef} placeholder='Email' required/>
                 </div>
                 <div className='input-container'>
-                    <input className='input' id='password' type='password' ref={passwordRef} placeholder='Password' required
-                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
-                    title="Must contain at least one  number and one uppercase and lowercase letter, and at least 6 or more characters"/>
+                    <input className='input' id='password' type='password' ref={passwordRef} placeholder='Password' required />
                 </div>
                 <div className='input-container'>
-                    <input className='input' id='password' type='password' ref={passwordConfirmRef} placeholder='Confirm password' required
-                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
-                    title="Must contain at least one  number and one uppercase and lowercase letter, and at least 6 or more characters"/>
+                    <input className='input' id='password' type='password' ref={passwordConfirmRef} placeholder='Confirm password' required />
                 </div>
                 <button className='submit-button' disabled={loading} type="submit">Sign Up</button>
             </form>

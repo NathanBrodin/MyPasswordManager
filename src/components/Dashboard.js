@@ -45,7 +45,6 @@ export default function Dashboard() {
             <input id='checkbox' className='checkbox' type="checkbox" checked={checked} onChange={handleAutoSubmitChange}/>
             <label htmlFor='checkbox'>Enable auto-submit</label>
             <p>Email: {currentUser.email}</p>
-            <p>Id: {currentUser.uid}</p>
         </div>
         <div className='logout-container'>
             <Link component={UpdateProfile}>Update Profile</Link>

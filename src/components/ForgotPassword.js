@@ -7,10 +7,8 @@ import Signup from './Signup'
 export default function ForgotPassword() {
     const emailRef = useRef()
     const { resetPassword } = useAuth()
-        // eslint-disable-next-line
     const [error, setError] = useState("") 
         // eslint-disable-next-line
-    const [message, setMessage] = useState("") 
     const [loading, setLoading] = useState(false)
 
     async function handleSubmit(e) {
@@ -18,11 +16,10 @@ export default function ForgotPassword() {
         
         try {
             setError("")    // Reset the error
-            setMessage("")
             setLoading(true)
 
             await resetPassword(emailRef.current.value)
-            setMessage("Check your inbox for further instructions")
+            setError("Check your inbox for further instructions")
             goTo(PrivateRoute)
         } catch {
             setError("Failed to reset password")
@@ -33,7 +30,8 @@ export default function ForgotPassword() {
     return (
         <div className='component-container'>
             <h1 className='title'>Reset Password</h1>
-            <form className='form' onSubmit={handleSubmit}>
+            {error && <div className="error"> {error} </div>}
+            <form className='form' onSubmit={handleSubmit} autoComplete="off">
                 <div className='input-container'>
                     <input className='input' id='email' type='email' ref={emailRef} placeholder='Email' required/>
                 </div>

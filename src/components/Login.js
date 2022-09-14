@@ -16,6 +16,10 @@ export default function Login() {
     async function handleSubmit(e) {
         e.preventDefault()
 
+        if (passwordRef.current.value.length < 6) {
+            return setError("Password must be at least 6 characters")
+        }
+
         try {
             setError("")    // Reset the error
             setLoading(true)
@@ -32,14 +36,13 @@ export default function Login() {
     return (
         <div className='component-container'>
             <h1 className='title'>Log In</h1>
-            <form className='form' onSubmit={handleSubmit}>
+            {error && <div className="error"> {error} </div>}
+            <form className='form' onSubmit={handleSubmit} autoComplete="off">
                 <div className='input-container'>
-                    <input className='input' id='email' type='email' ref={emailRef} placeholder='Email' autoComplete='off' required/>
+                    <input className='input' id='email' type='email' ref={emailRef} placeholder='Email'required/>
                 </div>
                 <div className='input-container'>
-                    <input className='input' id='password' type='password' ref={passwordRef} placeholder='Password' required
-                    pattern=".{6,}"
-                    title="Must contain at least one  number and one uppercase and lowercase letter, and at least 6 or more characters"/>
+                    <input className='input' id='password' type='password' ref={passwordRef} placeholder='Password' required/>
                 </div>
                 <button className='submit-button' disabled={loading} type="submit">Log In</button>
             </form>
