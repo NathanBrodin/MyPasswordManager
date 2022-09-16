@@ -30,6 +30,6 @@
     "128": "img/icon-128.png"
   },
   "options_page": "options.html",
-  "permissions": ["scripting","activeTab", "storage"],
+  "permissions": ["storage"],
   "host_permissions": ["*://*/*"]
 }
