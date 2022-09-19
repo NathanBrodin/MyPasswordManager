@@ -4,6 +4,8 @@
 My Password Manager is a chrome extension to store, autofill and submit your informations to any website.
 Every data is encrypted using AES and stored into Firebase Firestore database.
 
+[AVAILABLE ON CHROME STORE](https://chrome.google.com/webstore/detail/my-password-manager/cbdpjheokbekagaiopnocpkccjjjofbn)
+
 ## User guide
 Open the popup to create an account or to log in, once done, you're ready to use the extension. 
 When you log in into a page, you will see the save button at the top right of your screen, just fill the inputs of the website and instead of clicking to the connect button, click into the save button. It will store your inputs and login automatically to the page. 
